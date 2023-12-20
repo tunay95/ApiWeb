@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIproject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231219133946_CreateTables")]
+    [Migration("20231220061535_CreateTables")]
     partial class CreateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -9,15 +9,27 @@ namespace APIproject.Repositories.Implementations
         {
             _context = context;
         }
-        public async Task<IEnumerable<Car>> GetAll()
+        public async Task<IEnumerable<Car>> GetAll(params string[] includes)
         {
-            var query = await _context.Cars.ToListAsync();
+            IQueryable<Car> query =  _context.Cars;
+            if(includes is not null)
+            {
+                for(int i = 0; i < includes.Length; i++)
+                {
+                    query = query.Include(includes[i]);
+                }
+            }
             return query;
         }
 
-        public Task<Car> GetByIdAsync(int id)
+		public Task<IQueryable<Car>> GetAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<Car> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }

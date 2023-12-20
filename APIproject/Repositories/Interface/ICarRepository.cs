@@ -3,7 +3,7 @@
     public interface ICarRepository
     {
         
-        Task<IEnumerable<Car>> GetAll();
+        Task<IQueryable<Car>> GetAll();
         Task<Car>GetByIdAsync(int id);
     }
 }

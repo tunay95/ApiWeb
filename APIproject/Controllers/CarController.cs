@@ -19,7 +19,7 @@ namespace APIproject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<Car> cars = await _context.Cars.ToListAsync();
+            var cars = await _carRepository.GetAll();
             return StatusCode(StatusCodes.Status200OK, cars);
         }
 
@@ -29,7 +29,7 @@ namespace APIproject.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
-            var cars = await _context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+            var cars = await _carRepository.GetByIdAsync(id);
             if (id == null) return StatusCode(StatusCodes.Status404NotFound);
             return StatusCode(StatusCodes.Status200OK, cars);
         }
