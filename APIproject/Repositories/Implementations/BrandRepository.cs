@@ -1,4 +1,5 @@
 ﻿using APIproject.Repositories.Interface;
+using System.Linq.Expressions;
 
 namespace APIproject.Repositories.Implementations
 {
@@ -9,17 +10,20 @@ namespace APIproject.Repositories.Implementations
 		{
 			_context = context;
 		}
-		public async Task<IEnumerable<Brand>> GetAll(params string[] includes)
+		public async Task<IQueryable<Brand>> GetAll( Expression<Func<Brand,bool>>? expression=null,params string[] includes)
 		{
-			var query = await _context.Brands.ToListAsync();
-			if(includes is not null)
+            IQueryable<Brand> query = _context.Brands;
+            if (includes is not null)
 			{
-				query = query.Include();
+				for(int i = 0; i < includes.Length; i++)
+				{
+				    query = query.Include(includes[i]);
+				}
 			}
 			return query;
 		}
 
-		public async Task<Car> GetByIdAsync(int id)
+		public async Task<Brand> GetByIdAsync(int id)
 		{
 			return await _context.Brands.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
 		}

@@ -8,12 +8,10 @@ namespace APIproject.Controllers
     [ApiController]
     public class CarController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly ICarRepository _carRepository;
 
-        public CarController(AppDbContext context,ICarRepository carRepository)
+        public CarController(ICarRepository carRepository)
         {
-            _context = context;
             _carRepository = carRepository;
         }
         [HttpGet]
@@ -35,7 +33,7 @@ namespace APIproject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm]CreateCarDto CreateCarDto)
+        public async Task<IActionResult> Create([FromForm] CreateCarDto CreateCarDto)
         {
             Car car = new Car()
             {
@@ -44,10 +42,10 @@ namespace APIproject.Controllers
                 Description = CreateCarDto.Description,
                 ColourId = CreateCarDto.ColourId,
                 BrandId = CreateCarDto.BrandId
-               
+
             };
-            await _context.Cars.AddAsync(car);
-            await _context.SaveChangesAsync();
+            await _carRepository.Create(car);
+            await _carRepository.SaveChangesAsync();
             return StatusCode(StatusCodes.Status201Created, car);
         }
 
@@ -55,7 +53,7 @@ namespace APIproject.Controllers
         public async Task<IActionResult> Update(int id, Car updatedcar)
         {
             if (id <= 0) return StatusCode(StatusCodes.Status400BadRequest);
-            var cars = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            var cars = await _carRepository.GetByIdAsync(id);
             if (id == null) return StatusCode(StatusCodes.Status404NotFound);
 
 
@@ -63,21 +61,21 @@ namespace APIproject.Controllers
             cars.DailyPrice = updatedcar.DailyPrice;
             cars.Description = updatedcar.Description;
 
-            await _context.SaveChangesAsync();
+            _carRepository.Update(cars);
+            await _carRepository.SaveChangesAsync();
             return StatusCode(StatusCodes.Status200OK, cars);
 
         }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var car = _context.Cars.Find(id);
-            if (car == null) return StatusCode(StatusCodes.Status404NotFound);
-            _context.Cars.Remove(car);
-            _context.SaveChanges();
-            return StatusCode(StatusCodes.Status200OK);
-        }
+        //[HttpDelete]
+        //[Route("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var car = _carRepository.Cars.FirstOrDefault(c => c.Id == id);
+        //    ;
+        //    await _carRepository.SaveChangesAsync();
+        //    return StatusCode(StatusCodes.Status200OK);
+        //}
 
 
     }

@@ -1,8 +1,9 @@
-﻿namespace APIproject.Entities
+﻿using APIproject.Entities.Base;
+
+namespace APIproject.Entities
 {
-    public class Brand
+    public class Brand:BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public List<Car>? Cars { get; set; }
     }

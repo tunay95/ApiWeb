@@ -1,8 +1,9 @@
-﻿namespace APIproject.Entities
+﻿using APIproject.Entities.Base;
+
+namespace APIproject.Entities
 {
-    public class Car
+    public class Car:BaseEntity
     {
-        public int Id { get; set; }
         public int BrandId { get; set; }
         public int ColourId { get; set; }
         public DateTime ModelYear { get; set; }

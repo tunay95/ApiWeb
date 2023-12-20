@@ -1,35 +1,15 @@
-﻿using APIproject.Repositories.Interface;
+﻿using APIproject.Entities.Base;
+using APIproject.Repositories.Interface;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Linq.Expressions;
 
 namespace APIproject.Repositories.Implementations
 {
-    public class CarRepository : ICarRepository
+    public class CarRepository<T> : Repository<T> where T : BaseEntity
     {
-        private readonly AppDbContext _context;
-        public CarRepository(AppDbContext context)
+        public CarRepository(AppDbContext context) : base(context)
         {
-            _context = context;
-        }
-        public async Task<IEnumerable<Car>> GetAll(params string[] includes)
-        {
-            IQueryable<Car> query =  _context.Cars;
-            if(includes is not null)
-            {
-                for(int i = 0; i < includes.Length; i++)
-                {
-                    query = query.Include(includes[i]);
-                }
-            }
-            return query;
-        }
-
-		public Task<IQueryable<Car>> GetAll()
-		{
-			throw new NotImplementedException();
-		}
-
-		public async Task<Car> GetByIdAsync(int id)
-        {
-            return await _context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
         }
     }
+
 }
